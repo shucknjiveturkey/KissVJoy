@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,12 @@ namespace MultiWiiVJoy
 {
     public partial class Form1 : Form
     {
-
         private Serial serial = new Serial();
         private VirtualJoystick vJoy = new VirtualJoystick();
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -36,11 +36,12 @@ namespace MultiWiiVJoy
             vJoy.Init();
 
             fillCbxPortNames();
-            if (cbxPortNames.Items.Count > 0) {
+            if (cbxPortNames.Items.Count > 0)
+            {
                 cbxPortNames.SelectedIndex = 0;
             }
 
-            cbxBaudRate.SelectedIndex = 3;            
+            cbxBaudRate.SelectedIndex = 3;
             cbxInterval.SelectedIndex = 0;
         }
 
@@ -53,7 +54,7 @@ namespace MultiWiiVJoy
         void vJoy_Success(object sender)
         {
             panelVJoy.BackColor = Color.GreenYellow;
-        }        
+        }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -83,58 +84,64 @@ namespace MultiWiiVJoy
             MessageBox.Show(e.Error);
         }
 
+        private static short toInt16(byte[] value, int startIndex)
+        {
+            return (short)(value[startIndex] << 8 | value[startIndex + 1]);
+        }
+
+        public static int convertRange(
+            int originalStart, int originalEnd, // original range
+            int newStart, int newEnd, // desired range
+            int value) // value to convert
+        {
+            double scale = (double)(newEnd - newStart) / (originalEnd - originalStart);
+            return (int)(newStart + ((value - originalStart) * scale));
+        }
+
+        // calculateDegSec: input: -1000 to 1000, rate: 1.25, grate: 0.7, usecurve: 0.04
+        // output 833.33 to -833.33
+        public static double calculateDegSec(int input, double rate, double grate, double usecurve)
+        {
+            double setpoint = Convert.ToDouble(input) / 1000;
+            double RPY_useRates = 1 - Math.Abs(setpoint) * grate;
+            double rxRAW = Convert.ToDouble(input);
+            double curve = rxRAW * rxRAW / 1000000;
+            setpoint = ((setpoint * curve) * usecurve + setpoint * (1 - usecurve)) * (rate / 10);
+            double tmp = ((2000 * (1 / RPY_useRates)) * setpoint) * 100;
+            return (double)Math.Round(tmp) / 100;
+        }
+
         void serial_DataReceived(object sender, DataReceivedArgs e)
         {
-            if (e.Data.Length != 22) {
-                return;
-            }
-
-            byte checksum = 0;
-
-            // calculate checksum
-            for (int i = 3; i < (e.Data.Length - 1);i++ )
-            {
-                checksum ^= e.Data[i];
-            }
-
-            if (checksum != e.Data[21])
+            if (e.Data.Length < 16)
             {
                 return;
             }
-            
-            int roll = BitConverter.ToInt16(e.Data, 5);
-            int pitch = BitConverter.ToInt16(e.Data, 7);
-            int yaw = BitConverter.ToInt16(e.Data, 9);
-            int throttle = BitConverter.ToInt16(e.Data, 11);
-          
+
+            int throttle = toInt16(e.Data, 2);
+            int roll = toInt16(e.Data, 4);
+            int pitch = toInt16(e.Data, 6);
+            int yaw = toInt16(e.Data, 8);
+
+            bool ratesEnabled = true;
+            if (ratesEnabled)
+            {
+                roll = convertRange(-1110, 1110, -1000, 1000, (int)calculateDegSec(roll, 1.11, 0.8, 0.04));
+                pitch = convertRange(-1110, 1110, -1000, 1000, (int)calculateDegSec(pitch, 1.11, 0.8, 0.04));
+                yaw = convertRange(-833, 833, -1000, 1000, (int)calculateDegSec(yaw, 1.25, 0.7, 0.04));
+            }
+
             displayRcValueThrottle.Value = throttle;
             displayRcValueYaw.Value = yaw;
             displayRcValuePitch.Value = pitch;
             displayRcValueRoll.Value = roll;
 
-            yaw = (int)(((double)(yaw - 1000) / 1000D) * 32768);
-            if (cbxYaw.Checked) {
-                yaw = 32768 - yaw;
-            }
+            throttle = convertRange(0, 1000, 1, 32768, throttle);
+            roll = convertRange(-1000, 1000, 1, 32768, roll);
+            pitch = convertRange(-1000, 1000, 1, 32768, pitch);
+            yaw = convertRange(-1000, 1000, 1, 32768, yaw);
 
-            throttle = (int)(((double)(throttle - 1000) / 1000D) * 32768);
-            if (cbxThrottle.Checked)
-            {
-                throttle = 32768 - throttle;
-            }
-
-            roll = (int)(((double)(roll - 1000) / 1000D) * 32768);
-            if (cbxRoll.Checked)
-            {
-                roll = 32768 - roll;
-            }
-
-            pitch = (int)(((double)(pitch - 1000) / 1000D) * 32768);
-            if (cbxPitch.Checked)
-            {
-                pitch = 32768 - pitch;
-            }            
-
+            // VJoy Axis value is an integer in the range of 1-32767.
             vJoy.SetAxis(throttle, HID_USAGES.HID_USAGE_RX);
             vJoy.SetAxis(yaw, HID_USAGES.HID_USAGE_X);
 
@@ -158,14 +165,8 @@ namespace MultiWiiVJoy
 
         private void timerRc_Tick(object sender, EventArgs e)
         {
-            byte[] data = new byte[6];
-            data[0] = Convert.ToByte('$');
-            data[1] = Convert.ToByte('M');
-            data[2] = Convert.ToByte('<');
-            data[3] = Convert.ToByte(0);
-            data[4] = Convert.ToByte(105);
-            data[5] = Convert.ToByte(105);
-
+            byte[] data = new byte[8];
+            data[0] = Convert.ToByte(32);
             serial.Write(data);
         }
 
@@ -198,6 +199,9 @@ namespace MultiWiiVJoy
             timerRc.Interval = Convert.ToInt32(cbxInterval.SelectedItem);
         }
 
-        
+        private void displayRcValueThrottle_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
