@@ -1,19 +1,48 @@
-MultiWiiVJoy
+KissVJoy
 ============
 
-Use your transmitter as a joystick with MultiWii and vJoy
+Use your transmitter as a joystick with Kiss FC and vJoy.
+KissVJoy can also read the rates/expo settings on a KissFC and allows us to have the exact same rates/expo that are on a KissFC setup.
 
-This program is developed with Visual C# 2010 Express.
-It uses vJoy as a virtual joystick driver and feeds it with RC data from a MultiWii controller.
+It uses vJoy as a virtual joystick driver and feeds it with RC data from a Kiss Flight controller.
+A huge thanks to bitworking. I forked his repo (from: https://github.com/bitworking/MultiWiiVJoy) so most of the work is made by him.
 
-1. Install vJoy http://vjoystick.sourceforge.net/site/
-2. Configure vJoy -> Axes: X, Y, Rx, Ry
-3. Download or compile MultiWiiVJoy and run the exe. http://www.bitworking.de/wp-content/uploads/2014/05/MultiWiiVJoy.zip
-4. Connect to the MultiWii controller with MultiWiiVJoy. (Choose the right COM-Port and Baudrate)
-5. Turn on your transmitter (If you move the sticks you should see the movement)
-6. Run your flying simulator and choose the joystick interface.
-7. Calibrate/configure the joystick/transmitter as usual and FLY
+1. Install vJoy https://sourceforge.net/projects/vjoystick/files/latest/download
+2. Grab the KissVJoy executable from https://github.com/vever001/KissVJoy/releases (or get the sources and compile it), extract and run it.
+3. Connect to the KISS FC with KissVJoy. (Choose the right COM-Port)
+4. Turn on your transmitter (If you move the sticks you should see the movement)
+5. Run your flying simulator and choose the joystick interface.
+6. Calibrate/configure the joystick/transmitter as usual and FLY.
 
-More info on my blog: http://www.bitworking.de/multiwii-und-vjoy/
+
+I tested the following sims:
+
+FPV Event PE
+------------
+My favorite sim so far ;)
+Use their USB Interface Utility to map vJoy axis as explained.
+In game, hit "c" on your keyboard.
+For the rates (deg/s) input corresponding values displayed in KissFC vJoy for each axis.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in KissFC vJoy. And set expo to 0% for all axis in the game.
+
+FPV Freerider Recharged
+-----------------------
+In custom settings, change "Expo is on" to "Linear (experts only)".
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked.
+
+FPV Freerider
+-------------
+There is already some expo added by the sim. Unfortunately it cannot be disabled like in Recharged.
+So the best is not to apply the KissFC expo by unticking "Enable expo from FC".
+
+Liftoff
+-------
+In game, hit ESC on your keyboard.
+For the rates (deg/s) input corresponding values displayed in KissFC vJoy for each axis.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in KissFC vJoy. And set expo to 1 (linear) for all axis in the game.
+
+DRL
+---
+Reverse pitch axis only, start the game with centered joysticks.
 
 
