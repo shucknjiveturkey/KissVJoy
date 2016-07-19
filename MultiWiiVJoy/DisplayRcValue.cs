@@ -11,15 +11,26 @@ namespace MultiWiiVJoy
 {
     public partial class DisplayRcValue : UserControl
     {
-
         private int rcValue = 1000;
+        private bool centered = true;
 
         public int Value
         {
             get { return rcValue; }
-            set 
-            { 
+            set
+            {
                 rcValue = value;
+                this.Invalidate();
+            }
+        }
+
+        [Browsable(true)]
+        public bool Centered
+        {
+            get { return centered; }
+            set
+            {
+                centered = value;
                 this.Invalidate();
             }
         }
@@ -35,11 +46,17 @@ namespace MultiWiiVJoy
         {
             Graphics graphics = e.Graphics;
 
-            int width = (int)((double)(this.ClientSize.Width / 1000D) * (double)(rcValue - 1000));
+            int width = (int) ((double) (this.ClientSize.Width/1000D)*(double) (rcValue));
+            int midX = this.ClientSize.Width/2;
 
-            graphics.FillRectangle(fillColor, 0, 0, width, this.ClientSize.Height);
-            TextRenderer.DrawText(graphics, Convert.ToString(rcValue), this.Font, new Point(5, 0), Color.Black);
-
+            int x = 0;
+            if (this.centered)
+            {
+                width = width/2;
+                x = width >= 0 ? midX : midX - Math.Abs(width);
+            }
+            graphics.FillRectangle(fillColor, x, 0, Math.Abs(width), this.ClientSize.Height);
+            TextRenderer.DrawText(graphics, Convert.ToString(rcValue), this.Font, new Point(midX, 0), Color.Black);
         }
     }
 }
