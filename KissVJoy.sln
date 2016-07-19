@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiWiiVJoy", "MultiWiiVJoy\MultiWiiVJoy.csproj", "{B4A18C3F-EA41-400A-A03E-74CA0C798DDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KissVJoy", "KissVJoy\KissVJoy.csproj", "{B4A18C3F-EA41-400A-A03E-74CA0C798DDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

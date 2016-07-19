@@ -8,8 +8,8 @@
     <ProjectGuid>{B4A18C3F-EA41-400A-A03E-74CA0C798DDC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MultiWiiVJoy</RootNamespace>
-    <AssemblyName>MultiWiiVJoy</AssemblyName>
+    <RootNamespace>KissVJoy</RootNamespace>
+    <AssemblyName>KissVJoy</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -25,7 +25,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <SupportUrl>http://www.bitworking.de</SupportUrl>
-    <ProductName>MultiWiiYJoy</ProductName>
+    <ProductName>KissVJoy</ProductName>
     <PublisherName>bitWorking</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
@@ -101,6 +101,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
