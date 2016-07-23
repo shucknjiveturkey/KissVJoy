@@ -22,23 +22,28 @@ FPV Event PE
 My favorite sim so far ;)
 Use their USB Interface Utility to map vJoy axis as explained.
 In game, hit "c" on your keyboard.
-For the rates (deg/s) input corresponding values displayed in KissFC vJoy for each axis.
-Apply the KissFC expo by making sure "Enable expo from FC" is ticked in KissFC vJoy. And set expo to 0% for all axis in the game.
+For the rates (deg/s) input corresponding values displayed in Kiss vJoy for each axis.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in Kiss vJoy. And set expo to 0% for all axis in the game.
 
 FPV Freerider Recharged
 -----------------------
 In custom settings, change "Expo is on" to "Linear (experts only)".
-Apply the KissFC expo by making sure "Enable expo from FC" is ticked.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in Kiss vJoy.
 
 FPV Freerider (Classic)
 -----------------------
 Make sure you have the last version so you can disable the expo just like in Recharged (see above).
 
+Hotprops
+--------
+For the rates get the values from Kiss vJoy - Rates (deg/sec) - and divide them by 2000. Input that in Hotprops in setup menu. Repeat for each axis.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in Kiss vJoy. And set all expo to 1 (= no expo) in Hotprops. 
+
 Liftoff
 -------
 In game, hit ESC on your keyboard.
-For the rates (deg/s) input corresponding values displayed in KissFC vJoy for each axis.
-Apply the KissFC expo by making sure "Enable expo from FC" is ticked in KissFC vJoy. And set expo to 1 (linear) for all axis in the game.
+For the rates (deg/s) input corresponding values displayed in Kiss vJoy for each axis.
+Apply the KissFC expo by making sure "Enable expo from FC" is ticked in Kiss vJoy. And set expo to 1 (linear) for all axis in the game.
 
 DRL
 ---
