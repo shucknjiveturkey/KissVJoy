@@ -30,10 +30,9 @@ FPV Freerider Recharged
 In custom settings, change "Expo is on" to "Linear (experts only)".
 Apply the KissFC expo by making sure "Enable expo from FC" is ticked.
 
-FPV Freerider
--------------
-There is already some expo added by the sim. Unfortunately it cannot be disabled like in Recharged.
-So the best is not to apply the KissFC expo by unticking "Enable expo from FC".
+FPV Freerider (Classic)
+-----------------------
+Make sure you have the last version so you can disable the expo just like in Recharged (see above).
 
 Liftoff
 -------
